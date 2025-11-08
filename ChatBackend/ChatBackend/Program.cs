@@ -9,14 +9,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// SQLite veritabanı ayarı
+// === DATABASE ===
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=chat.db"));
 
-// HttpClient servisi (AI isteği için)
+// === HTTP CLIENT ===
 builder.Services.AddHttpClient();
 
-// Swagger / OpenAPI
+// === SWAGGER ===
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -27,14 +27,14 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// CORS — sadece Vercel frontend ve yerel testler için
+// === CORS ===
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy.WithOrigins(
-            "https://full-stack-ai-chat-app.vercel.app", // Vercel domainin
-            "http://localhost:3000"                      // Local test için
+            "https://full-stack-ai-chat-app.vercel.app", // ✅ Vercel domain
+            "http://localhost:3000"                      // ✅ Local test
         )
         .AllowAnyHeader()
         .AllowAnyMethod();
@@ -43,10 +43,14 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// CORS aktif et
+// === MIDDLEWARE SIRASI ===
+// CORS en üstte olmalı
 app.UseCors("AllowFrontend");
 
-// Swagger her zaman açık
+app.UseRouting();
+app.UseAuthorization();
+
+// === SWAGGER ===
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -54,41 +58,39 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
-// Veritabanı migration kontrolü
+// === DATABASE MIGRATION ===
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
 }
 
-// Basit test endpoint
+// === TEST ENDPOINT ===
 app.MapGet("/", () => "Backend çalışıyor! 🚀");
 
-
-// Kullanıcı ekleme (Güncellenmiş)
+// === USER ENDPOINT ===
 app.MapPost("/users", async (AppDbContext db, User user) =>
 {
-    // 1. Aynı kullanıcı adının olup olmadığını kontrol et
-    bool exists = await db.Users.AnyAsync(u => u.Name == user.Name); 
-    // Not: Modelinizdeki kullanıcı adı alanının "Name" olduğunu varsaydım.
-
-    if (exists)
+    try
     {
-        // 2. Eğer varsa, uygun bir hata mesajı döndür
-        return Results.Conflict($"'{user.Name}' kullanıcı adı zaten kullanılıyor.");
-    }
+        bool exists = await db.Users.AnyAsync(u => u.Name == user.Name);
+        if (exists)
+            return Results.Conflict($"'{user.Name}' kullanıcı adı zaten mevcut.");
 
-    // 3. Kullanıcı adı benzersizse ekle
-    db.Users.Add(user);
-    await db.SaveChangesAsync();
-    return Results.Created($"/users/{user.Id}", user); // 201 Created döndürmek daha RESTful'dur
+        db.Users.Add(user);
+        await db.SaveChangesAsync();
+        return Results.Created($"/users/{user.Id}", user);
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Kullanıcı eklenirken hata oluştu: {ex.Message}");
+    }
 });
 
-// Tüm kullanıcıları listeleme
 app.MapGet("/users", async (AppDbContext db) =>
     await db.Users.ToListAsync());
 
-// Mesaj gönderme + AI analizi
+// === MESSAGE ENDPOINT ===
 app.MapPost("/messages", async (AppDbContext db, IHttpClientFactory httpClientFactory, SendMessageDto dto) =>
 {
     var user = await db.Users.FindAsync(dto.UserId);
@@ -97,7 +99,6 @@ app.MapPost("/messages", async (AppDbContext db, IHttpClientFactory httpClientFa
 
     var predictBaseUrl = "https://noir01-emotion-analysis-ai.hf.space/gradio_api/call/predict";
     var client = httpClientFactory.CreateClient();
-
     var payload = new { data = new object[] { dto.Text } };
 
     try
@@ -175,8 +176,8 @@ app.MapPost("/messages", async (AppDbContext db, IHttpClientFactory httpClientFa
     }
 });
 
-// Tüm mesajları listeleme
 app.MapGet("/messages", async (AppDbContext db) =>
     await db.Messages.Include(m => m.User).ToListAsync());
 
 app.Run();
+
