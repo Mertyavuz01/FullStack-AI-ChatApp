@@ -5,7 +5,7 @@ export async function addUser(nickname) {
   const response = await fetch(`${API_URL}/users`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ nickname }), // ✅ id:0 KALDIRILDI
+    body: JSON.stringify({ Nickname: nickname }), // Backend User modeline uygun olarak Nickname kullanıldı
   });
 
   if (!response.ok) {
