@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mert\\ChatBackend\\ChatBackend\\ChatBackend.csproj": {}
+    "C:\\Users\\Mert\\FullStack-AI-ChatApp\\ChatBackend\\ChatBackend\\ChatBackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mert\\ChatBackend\\ChatBackend\\ChatBackend.csproj": {
+    "C:\\Users\\Mert\\FullStack-AI-ChatApp\\ChatBackend\\ChatBackend\\ChatBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mert\\ChatBackend\\ChatBackend\\ChatBackend.csproj",
+        "projectUniqueName": "C:\\Users\\Mert\\FullStack-AI-ChatApp\\ChatBackend\\ChatBackend\\ChatBackend.csproj",
         "projectName": "ChatBackend",
-        "projectPath": "C:\\Users\\Mert\\ChatBackend\\ChatBackend\\ChatBackend.csproj",
+        "projectPath": "C:\\Users\\Mert\\FullStack-AI-ChatApp\\ChatBackend\\ChatBackend\\ChatBackend.csproj",
         "packagesPath": "C:\\Users\\Mert\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mert\\ChatBackend\\ChatBackend\\obj\\",
+        "outputPath": "C:\\Users\\Mert\\FullStack-AI-ChatApp\\ChatBackend\\ChatBackend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

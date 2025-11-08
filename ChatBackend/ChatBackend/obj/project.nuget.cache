@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qt2w84EzToM=",
+  "dgSpecHash": "5h5rzmB6dL4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Mert\\ChatBackend\\ChatBackend\\ChatBackend.csproj",
+  "projectFilePath": "C:\\Users\\Mert\\FullStack-AI-ChatApp\\ChatBackend\\ChatBackend\\ChatBackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Mert\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Mert\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.10\\microsoft.aspnetcore.openapi.9.0.10.nupkg.sha512",
