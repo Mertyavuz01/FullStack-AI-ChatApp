@@ -37,9 +37,32 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+// CORS ayarları
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowVercel",
+        policy =>
+        {
+            policy.WithOrigins("https://full-stack-ai-chat-app.vercel.app") // Vercel domainin
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 var app = builder.Build();
+app.UseCors("AllowVercel");
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
 // Gerekirse migrationları otomatik uygula (tablo hatalarını azaltmak için)
 using (var scope = app.Services.CreateScope())
 {
