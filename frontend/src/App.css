@@ -1,0 +1,107 @@
+body {
+  background-color: #121212;
+  color: #f0f0f0;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 2.5rem;
+  color: #fff;
+}
+
+input, button {
+  border: none;
+  outline: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+input {
+  background-color: #1f1f1f;
+  color: #eee;
+  border: 1px solid #333;
+}
+
+button {
+  background-color: #7b5dfc;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #937bff;
+}
+
+/* Mesaj kutuları */
+.message {
+  padding: 12px 16px;
+  margin: 10px 0;
+  border-radius: 10px;
+  max-width: 70%;
+  word-wrap: break-word;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.message.user {
+  background-color: #2a2a2a;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.message.ai {
+  background-color: #1e1e1e;
+  border-left: 3px solid #7b5dfc;
+  align-self: flex-start;
+}
+
+.message i {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 40px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.messages-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+}
+.ai-loading {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dots::after {
+  content: "...";
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+  0% { content: ""; }
+  33% { content: "."; }
+  66% { content: ".."; }
+  100% { content: "..."; }
+}
