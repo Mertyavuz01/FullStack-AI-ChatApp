@@ -64,12 +64,24 @@ using (var scope = app.Services.CreateScope())
 // Basit test endpoint
 app.MapGet("/", () => "Backend çalışıyor! 🚀");
 
-// Kullanıcı ekleme
+
+// Kullanıcı ekleme (Güncellenmiş)
 app.MapPost("/users", async (AppDbContext db, User user) =>
 {
+    // 1. Aynı kullanıcı adının olup olmadığını kontrol et
+    bool exists = await db.Users.AnyAsync(u => u.Name == user.Name); 
+    // Not: Modelinizdeki kullanıcı adı alanının "Name" olduğunu varsaydım.
+
+    if (exists)
+    {
+        // 2. Eğer varsa, uygun bir hata mesajı döndür
+        return Results.Conflict($"'{user.Name}' kullanıcı adı zaten kullanılıyor.");
+    }
+
+    // 3. Kullanıcı adı benzersizse ekle
     db.Users.Add(user);
     await db.SaveChangesAsync();
-    return Results.Ok(user);
+    return Results.Created($"/users/{user.Id}", user); // 201 Created döndürmek daha RESTful'dur
 });
 
 // Tüm kullanıcıları listeleme
